@@ -19,6 +19,6 @@ if [ "$CACHE_MODE" != "mongodb" ] && [ "$CACHE_MODE" != "redis" ]; then
 fi
 
 # 運行 Fortio 測試
-fortio load -qps 1000 -c 50 -t 10s -H "Content-Type: application/json" \
+fortio load -qps 0 -c 50 -n 2000 -H "Content-Type: application/json" \
     -payload "{\"user_id\": \"test_user\", \"cache_mode\": \"${CACHE_MODE}\"}" \
     http://localhost:8089/campaign/${CAMPAIGN_ID}/claim
