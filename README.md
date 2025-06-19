@@ -27,6 +27,31 @@
 - **POST /campaign/:campaign_id/claim**  
   領取指定活動的紅包，需提供用戶 ID 和 `cache_mode`。
 
+## 環境設置
+
+### 1. 安裝 Docker 和 Docker Compose
+
+確保已安裝 Docker 和 Docker Compose：
+
+- **Docker**：請參考 [官方安裝指南](https://docs.docker.com/get-docker/)。
+- **Docker Compose**：通常隨 Docker Desktop 一起安裝，或參考 [官方安裝指南](https://docs.docker.com/compose/install/)。
+
+### 2. 安裝 Go
+
+專案需要 Go 環境來運行後端服務：
+
+- 下載並安裝 Go（建議版本 1.18 或更高）：[Go 官方下載](https://golang.org/dl/)。
+- 驗證安裝：
+  ```bash
+  go version
+  ```
+
+### 3. 安裝 Fortio
+
+Fortio 是用於高併發負載測試的工具，需安裝以執行測試腳本：
+
+- 下載並安裝 Fortio：[Fortio 官方下載](https://github.com/fortio/fortio)。
+
 ## 環境配置
 
 專案使用 Docker Compose 管理資料庫和緩存服務，配置文件 `docker-compose.yml` 包含以下服務：
