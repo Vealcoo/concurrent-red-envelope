@@ -34,6 +34,22 @@ func FindCampaignByStatus(db *gorm.DB, status int32) ([]*Campaign, error) {
 	return campaigns, nil
 }
 
+func StartCampaign(db *gorm.DB, id int64) error {
+	result := db.Model(&Campaign{}).Where("id = ?", id).Where("status = ?", 1).
+		Updates(map[string]interface{}{
+			"status":      2,
+			"expire_time": time.Now().Add(time.Minute * 10).Unix(),
+		})
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected == 0 {
+		return fmt.Errorf("update failed")
+	}
+
+	return nil
+}
+
 func UpdateCampaignStatus(db *gorm.DB, id int64, statusFrom, statusTo int32) error {
 	result := db.Model(&Campaign{}).Where("id = ?", id).Where("status = ?", statusFrom).Update("status", statusTo)
 	if result.Error != nil {

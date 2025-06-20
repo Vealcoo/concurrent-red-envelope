@@ -101,11 +101,13 @@ func (h *Handler) StartCampaign(c *gin.Context) {
 
 	tx := h.MySQL.Begin()
 	if tx.Error != nil {
+		tx.Rollback()
 		c.JSON(400, gin.H{"error": tx.Error.Error()})
 		return
 	}
-	err = mysql.UpdateCampaignStatus(tx, campaignIDInt64, 1, 2)
+	err = mysql.StartCampaign(tx, campaignIDInt64)
 	if err != nil {
+		tx.Rollback()
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
@@ -203,7 +205,7 @@ func (h *Handler) ClaimRedEnvelope(c *gin.Context) {
 	ctx := c.Request.Context()
 	switch req.CacheMode {
 	case "mongodb":
-		res, err := mongodb.FindAndUpdateStatus(ctx, h.MongoDBCollection, campaignIDInt64, req.UserID)
+		res, err := mongodb.FindAndUpdateRedEnvelopeStatus(ctx, h.MongoDBCollection, campaignIDInt64, req.UserID)
 		if err != nil && err != mongo.ErrNoDocuments {
 			c.JSON(400, gin.H{"error": err.Error()})
 			return

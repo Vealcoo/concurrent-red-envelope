@@ -14,12 +14,7 @@ type server struct {
 }
 
 func New() *server {
-	mysql, err := mysql.Conn()
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	return &server{mysql: mysql}
+	return &server{mysql: mysql.MySQLClient}
 }
 
 func (s *server) Run() {

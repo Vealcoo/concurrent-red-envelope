@@ -8,7 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func FindAndUpdateStatus(ctx context.Context, c *mongo.Collection, campaignID int64, userID string) (*RedEnvelope, error) {
+func FindAndUpdateRedEnvelopeStatus(ctx context.Context, c *mongo.Collection, campaignID int64, userID string) (*RedEnvelope, error) {
 	res := &RedEnvelope{}
 	err := c.FindOneAndUpdate(ctx, bson.M{
 		"campaign_id": campaignID,

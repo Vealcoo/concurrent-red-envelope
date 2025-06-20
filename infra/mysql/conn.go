@@ -1,6 +1,7 @@
 package mysql
 
 import (
+	"log"
 	"test/config"
 	"time"
 
@@ -8,20 +9,22 @@ import (
 	"gorm.io/gorm"
 )
 
-func Conn() (*gorm.DB, error) {
+var MySQLClient *gorm.DB
+
+func init() {
 	dsn := config.Setting.GetString("mysql.dsn")
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		return nil, err
+		log.Fatal(err)
 	}
 
 	sqlDB, err := db.DB()
 	if err != nil {
-		return nil, err
+		log.Fatal(err)
 	}
 	sqlDB.SetMaxOpenConns(100)                // 最大開啟連線數
 	sqlDB.SetMaxIdleConns(10)                 // 最大閒置連線數
 	sqlDB.SetConnMaxLifetime(time.Minute * 5) // 連線最長存活時間
 
-	return db, nil
+	MySQLClient = db
 }

@@ -89,21 +89,13 @@ Fortio 是用於高併發負載測試的工具，需安裝以執行測試腳本�
 
 按照以下步驟啟動專案：
 
-1. **啟動 Docker 環境**
+1. **啟動服務**
 
    ```bash
-   docker-compose up -d
+   ./start_server.sh
    ```
 
-   此命令會啟動 MySQL、MongoDB 和 Redis 容器。
-
-2. **啟動後端服務**
-
-   ```bash
-   go run main.go
-   ```
-
-3. **執行測試腳本**
+2. **執行測試腳本**
 
    - 寫入測試資料
 
@@ -111,10 +103,22 @@ Fortio 是用於高併發負載測試的工具，需安裝以執行測試腳本�
    ./script/insert_test_data.sh
    ```
 
-   為模擬真實資料量，所以會寫入 2000000 筆 資料
+   為模擬真實資料量，所以會寫入 1000 個活動，共 2000000 筆紅包資料，比較久一點
 
    - 執行測試 參數 1: 活動 ID 參數 2: 緩存模式
 
    ```bash
    ./exec_testing.sh 1 mongodb
    ```
+
+   每個活動只能跑一次，每次測試請換不同活動 ID
+
+   - 腳本路徑：script/fortio_testing.sh
+
+   ```bash
+   fortio load -qps 0 -c 50 -n 2000 -H "Content-Type: application/json" \
+    -payload "{\"user_id\": \"test_user\", \"cache_mode\": \"${CACHE_MODE}\"}" \
+    http://localhost:8089/campaign/${CAMPAIGN_ID}/claim
+   ```
+
+   可依照自己需求調整腳本

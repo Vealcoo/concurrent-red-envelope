@@ -2,12 +2,15 @@ package redis
 
 import (
 	"context"
+	"log"
 	"test/config"
 
 	"github.com/redis/go-redis/v9"
 )
 
-func Conn() (*redis.Client, error) {
+var RedisClient *redis.Client
+
+func init() {
 	client := redis.NewClient(&redis.Options{
 		Addr:     config.Setting.GetString("redis.addr"),
 		Username: "",
@@ -22,7 +25,8 @@ func Conn() (*redis.Client, error) {
 		// WriteTimeout: time.Second * 3, // 寫入超時
 	})
 	if _, err := client.Ping(context.Background()).Result(); err != nil {
-		return nil, err
+		log.Fatal(err)
 	}
-	return client, nil
+
+	RedisClient = client
 }

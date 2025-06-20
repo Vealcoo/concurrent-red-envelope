@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"test/infra/mongodb"
 	"test/infra/mysql"
 	redismodel "test/infra/redis"
@@ -18,25 +17,10 @@ type Handler struct {
 }
 
 func NewHandler() *Handler {
-	mySQL, err := mysql.Conn()
-	if err != nil {
-		panic(fmt.Sprintf("failed to connect to database: %v", err))
-	}
-
-	redisClient, err := redismodel.Conn()
-	if err != nil {
-		panic(fmt.Sprintf("failed to connect to redis: %v", err))
-	}
-
-	mongoDatabase, err := mongodb.Conn()
-	if err != nil {
-		panic(fmt.Sprintf("failed to connect to mongodb: %v", err))
-	}
-
 	h := &Handler{
-		MySQL:             mySQL,
-		Redis:             redisClient,
-		MongoDBCollection: mongoDatabase.Collection("red_envelope"),
+		MySQL:             mysql.MySQLClient,
+		Redis:             redismodel.RedisClient,
+		MongoDBCollection: mongodb.MongoClient.Database("test").Collection("red_envelope"),
 	}
 
 	return h

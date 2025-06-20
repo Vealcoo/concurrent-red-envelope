@@ -5,5 +5,7 @@ mysql:
   dsn: "admin:admin@tcp(127.0.0.1:3306)/test?charset=utf8mb4&parseTime=True&loc=Local"
 mongodb:
   uri: "mongodb://admin:admin@127.0.0.1:27017/?directConnection=true"
+  writeconcern:
+    journal: true
 redis:
   addr: "127.0.0.1:6379"
